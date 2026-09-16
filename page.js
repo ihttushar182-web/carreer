@@ -60,42 +60,54 @@
     updateService();
 
     const upload = $('#project-file');
+    const paymentUpload = $('input[name="paymentScreenshot"]');
     const fileStatus = $('.purchase-file-status');
     upload?.addEventListener('change', () => validateUpload(upload, fileStatus));
-    orderForm.addEventListener('submit', (event) => {
+    paymentUpload?.addEventListener('change', () => validateUpload(paymentUpload, fileStatus));
+    orderForm.addEventListener('submit', async (event) => {
       event.preventDefault();
-      const uploadOk = !upload || validateUpload(upload, fileStatus);
+      const uploadOk = (!upload || validateUpload(upload, fileStatus)) && (!paymentUpload || validateUpload(paymentUpload, fileStatus));
       if (!orderForm.checkValidity() || !uploadOk) {
         orderForm.reportValidity();
         return;
       }
-      const data = Object.fromEntries(new FormData(orderForm).entries());
-      const reference = `CM-${new Date().getFullYear()}${String(Math.floor(Math.random() * 9000) + 1000)}`;
-      data.reference = reference;
-      data.submittedAt = new Date().toISOString();
-      data.file = upload?.files?.[0]?.name || '';
+      const submitButton = orderForm.querySelector('button[type="submit"]');
+      const request = new FormData(orderForm);
+      submitButton.disabled = true;
+      submitButton.textContent = 'Submitting…';
       try {
-        const requests = JSON.parse(localStorage.getItem('careerMinuteRequests') || '[]');
-        requests.push(data);
-        localStorage.setItem('careerMinuteRequests', JSON.stringify(requests));
-      } catch (_) { /* Submission flow remains available where local storage is disabled. */ }
-      const selected = serviceField.options[serviceField.selectedIndex].text;
-      window.location.assign(`/thank-you/?ref=${encodeURIComponent(reference)}&name=${encodeURIComponent(data.fullName)}&service=${encodeURIComponent(selected)}`);
+        const response = await fetch('/api/orders', { method: 'POST', body: request, credentials: 'same-origin' });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Your request could not be submitted.');
+        const selected = serviceField.options[serviceField.selectedIndex].text;
+        window.CareerMinuteAnalytics?.track('order_submit', selected);
+        window.location.assign(`/thank-you/?ref=${encodeURIComponent(result.reference)}&name=${encodeURIComponent(request.get('fullName'))}&service=${encodeURIComponent(selected)}`);
+      } catch (error) {
+        fileStatus.textContent = error.message || 'Unable to submit right now. Please message us on WhatsApp.';
+        fileStatus.classList.add('error');
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Submit my request <span>→</span>';
+      }
     });
   }
 
   const contactForm = $('#contact-form');
-  contactForm?.addEventListener('submit', (event) => {
+  contactForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!contactForm.checkValidity()) { contactForm.reportValidity(); return; }
+    const button = contactForm.querySelector('button[type="submit"]');
     const data = Object.fromEntries(new FormData(contactForm).entries());
+    button.disabled = true;
     try {
-      const messages = JSON.parse(localStorage.getItem('careerMinuteMessages') || '[]');
-      messages.push({ ...data, submittedAt: new Date().toISOString() });
-      localStorage.setItem('careerMinuteMessages', JSON.stringify(messages));
-    } catch (_) { /* no-op */ }
-    notify('Thank you. Your message is ready for the Career Minute team.');
-    contactForm.reset();
+      const response = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify(data) });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Your message could not be sent.');
+      window.CareerMinuteAnalytics?.track('contact_submit', data.topic);
+      notify('Thank you. Career Minute has received your message.');
+      contactForm.reset();
+    } catch (error) {
+      notify(error.message || 'Unable to send your message right now. Please use WhatsApp.');
+    } finally { button.disabled = false; }
   });
 
   const name = new URLSearchParams(window.location.search).get('name');

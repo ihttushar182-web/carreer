@@ -10,4 +10,14 @@
   <url><loc>https://careerminute.com/faq/</loc><priority>0.6</priority></url>
   <url><loc>https://careerminute.com/contact/</loc><priority>0.7</priority></url>
   <url><loc>https://careerminute.com/policies/</loc><priority>0.4</priority></url>
+  <url><loc>https://careerminute.com/en/</loc><priority>0.9</priority></url>
+  <url><loc>https://careerminute.com/en/services/</loc><priority>0.8</priority></url>
+  <url><loc>https://careerminute.com/en/services/cv/</loc><priority>0.8</priority></url>
+  <url><loc>https://careerminute.com/en/services/portfolio-website/</loc><priority>0.8</priority></url>
+  <url><loc>https://careerminute.com/en/pricing/</loc><priority>0.7</priority></url>
+  <url><loc>https://careerminute.com/en/samples/</loc><priority>0.6</priority></url>
+  <url><loc>https://careerminute.com/en/about/</loc><priority>0.5</priority></url>
+  <url><loc>https://careerminute.com/en/faq/</loc><priority>0.5</priority></url>
+  <url><loc>https://careerminute.com/en/contact/</loc><priority>0.6</priority></url>
+  <url><loc>https://careerminute.com/en/policies/</loc><priority>0.3</priority></url>
 </urlset>

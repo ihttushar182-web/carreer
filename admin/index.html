@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#0b1d33" />
+  <title>Career Minute Admin</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/career-minute-logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="admin-body">
+  <main class="admin-shell">
+    <section class="admin-login" id="admin-login">
+      <a class="brand" href="/"><img class="brand-logo" src="/assets/career-minute-logo.svg" alt="Career Minute logo" /><span class="brand-type">Career <strong>Minute</strong></span></a>
+      <div class="admin-login-card">
+        <p class="eyebrow"><span class="eyebrow-mark">ADMIN</span> Private workspace</p>
+        <h1>Manage every next <em>step.</em></h1>
+        <p>Review service requests, verify manual payment, update order status and control public service settings.</p>
+        <form id="admin-login-form">
+          <label>Admin password<input type="password" name="password" autocomplete="current-password" required placeholder="Enter secure password" /></label>
+          <p class="admin-form-message" id="admin-login-message"></p>
+          <button class="button button-mint" type="submit">Open dashboard <span>→</span></button>
+        </form>
+      </div>
+      <a class="admin-home-link" href="/">← Return to public website</a>
+    </section>
+
+    <section class="admin-dashboard" id="admin-dashboard" hidden>
+      <header class="admin-header">
+        <a class="brand" href="/"><img class="brand-logo" src="/assets/career-minute-logo.svg" alt="Career Minute logo" /><span class="brand-type">Career <strong>Minute</strong></span></a>
+        <div><span class="admin-status-dot"></span><small>Admin workspace</small><button type="button" id="admin-logout">Log out</button></div>
+      </header>
+      <div class="admin-content">
+        <div class="admin-title-row"><div><p class="eyebrow"><span class="eyebrow-mark">01</span> Overview</p><h1>Today’s career <em>requests.</em></h1></div><button class="button button-dark" type="button" id="admin-refresh">Refresh data <span>↻</span></button></div>
+        <div class="admin-stats"><article><span>New</span><b data-stat="new">0</b></article><article><span>In progress</span><b data-stat="in-progress">0</b></article><article><span>Completed</span><b data-stat="completed">0</b></article><article><span>Payment pending</span><b data-stat="payment">0</b></article></div>
+        <section class="admin-panel"><div class="admin-panel-head"><div><p class="eyebrow"><span class="eyebrow-mark">02</span> Orders</p><h2>Customer requests</h2></div><label class="admin-filter">Status <select id="admin-status-filter"><option value="">All requests</option><option value="new">New</option><option value="information-review">Information review</option><option value="in-progress">In progress</option><option value="first-draft">First draft</option><option value="revision">Revision</option><option value="final-review">Final review</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></label></div><div id="admin-orders" class="admin-orders"><p class="admin-empty">Loading requests…</p></div></section>
+        <section class="admin-panel settings-panel"><div class="admin-panel-head"><div><p class="eyebrow"><span class="eyebrow-mark">03</span> Public settings</p><h2>Business, pricing &amp; analytics</h2></div></div><form id="admin-settings-form" class="admin-settings-form"><div class="admin-field-grid"><label>Business email<input name="businessEmail" type="email" placeholder="hello@your-domain.com" /></label><label>Business hours<input name="businessHours" placeholder="Saturday–Thursday, 10:00 AM–8:00 PM" /></label><label>WhatsApp number<input name="whatsappNumber" placeholder="8801814716713" /></label><label>Facebook URL<input name="facebookUrl" type="url" placeholder="https://www.facebook.com/careerminute" /></label><label>GA4 Measurement ID<input name="googleMeasurementId" placeholder="G-XXXXXXXXXX" /></label><label>Meta Pixel ID<input name="metaPixelId" placeholder="1234567890" /></label></div><div class="admin-subheading"><h3>Manual payment instructions</h3><p>Enable only verified merchant methods. Account information is shown publicly only when that method is enabled.</p></div><div class="admin-payment-grid"><label><span><input type="checkbox" name="bKashEnabled" /> bKash</span><input name="bKashAccount" placeholder="Merchant number" /><textarea name="bKashInstruction" rows="2" placeholder="Payment instruction"></textarea></label><label><span><input type="checkbox" name="NagadEnabled" /> Nagad</span><input name="NagadAccount" placeholder="Merchant number" /><textarea name="NagadInstruction" rows="2" placeholder="Payment instruction"></textarea></label><label><span><input type="checkbox" name="RocketEnabled" /> Rocket</span><input name="RocketAccount" placeholder="Merchant number" /><textarea name="RocketInstruction" rows="2" placeholder="Payment instruction"></textarea></label><label><span><input type="checkbox" name="CardEnabled" /> Card / SSLCommerz</span><input name="CardAccount" placeholder="Gateway / payment URL" /><textarea name="CardInstruction" rows="2" placeholder="Payment instruction"></textarea></label></div><div class="admin-subheading"><h3>Featured package prices</h3><p>Leave price blank to show “Custom quote” on the public website.</p></div><div class="admin-package-grid"><label>CV Foundation<input name="cvFoundationPrice" inputmode="numeric" placeholder="Price, e.g. 800" /><input name="cvFoundationDays" inputmode="numeric" placeholder="Delivery days" /><input name="cvFoundationRevisions" inputmode="numeric" placeholder="Revision count" /></label><label>CV Momentum<input name="cvMomentumPrice" inputmode="numeric" placeholder="Price, e.g. 1500" /><input name="cvMomentumDays" inputmode="numeric" placeholder="Delivery days" /><input name="cvMomentumRevisions" inputmode="numeric" placeholder="Revision count" /></label><label>Portfolio Showcase<input name="portfolioShowcasePrice" inputmode="numeric" placeholder="Price, e.g. 8000" /><input name="portfolioShowcaseDays" inputmode="numeric" placeholder="Delivery days" /><input name="portfolioShowcaseRevisions" inputmode="numeric" placeholder="Revision count" /></label><label>Personal Brand Pack<input name="personalBrandPrice" inputmode="numeric" placeholder="Price, e.g. 10000" /><input name="personalBrandDays" inputmode="numeric" placeholder="Delivery days" /><input name="personalBrandRevisions" inputmode="numeric" placeholder="Revision count" /></label></div><p class="admin-form-message" id="admin-settings-message"></p><button class="button button-dark" type="submit">Save public settings <span>→</span></button></form></section>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/admin.js"></script>
+</body>
+</html>

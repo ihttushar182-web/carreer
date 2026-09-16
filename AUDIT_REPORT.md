@@ -1,8 +1,8 @@
 # Career Minute — Website Audience & Launch Audit
 
-**Audit date:** 17 September 2026  
-**Scope:** Career Minute public website, user journey, visible conversion paths, clean-route deployment build, SEO baseline and responsive readiness.  
-**Audience lens:** Students, fresh graduates, job seekers, career switchers, corporate/NGO applicants, freelancers and creative professionals in Bangladesh.  
+**Audit date:** 17 September 2026
+**Scope:** Career Minute public website, user journey, visible conversion paths, clean-route deployment build, SEO baseline and responsive readiness.
+**Audience lens:** Students, fresh graduates, job seekers, career switchers, corporate/NGO applicants, freelancers and creative professionals in Bangladesh.
 
 ## Executive assessment
 
@@ -10,8 +10,19 @@ The website now makes a strong first impression as a **career-document and perso
 
 > Home → choose CV / portfolio / career service → order request → request confirmation → thank-you page → return home.
 
-**Frontend/static deployment readiness: 8.5 / 10**  
-**Live commerce/data-operation readiness: 5 / 10** — secure server-side order storage, private document storage, payment verification, real notifications and final business details must be connected before accepting real customer data.
+**Frontend/static deployment readiness: 9 / 10**
+**Live commerce/data-operation readiness: 7.5 / 10** — the same-origin API, private upload handling, admin workspace, payment-verification workflow and consent-aware analytics are now implemented. Verified merchant payment details, a production business email, persistent encrypted storage and authentic testimonials remain business-launch configuration tasks.
+
+### Implementation update — improvements completed
+
+- Added same-origin `/api` service endpoints for orders, contact messages, CV Checklist subscriptions and conversion events.
+- Added private validated upload handling, rate limiting, security headers and a protected `/admin/` order-management workspace.
+- Added configurable payment methods, merchant instructions, package prices, delivery days, revision counts, business contact details, GA4 and Meta Pixel fields in admin settings.
+- Added a manual payment-preparation area with transaction ID and payment-proof upload support.
+- Added a privacy-choice banner; analytics starts only after visitor consent.
+- Added a free CV Checklist lead capture and a visitor decision helper for students, job applicants, portfolio buyers and personal-brand clients.
+- Added static English routes under `/en/` with reciprocal Bangla/English `hreflang` tags, while Bangla remains the default path.
+- Added a 404 response page, social-sharing image and Docker deployment file.
 
 ---
 
@@ -19,8 +30,8 @@ The website now makes a strong first impression as a **career-document and perso
 
 | Check | Result |
 | --- | --- |
-| Public clean routes checked | **12 / 12 returned HTTP 200** |
-| Internal local links inspected | **21 unique links; 0 broken** |
+| Production routes and assets checked | **31 / 31 returned HTTP 200** |
+| Internal local links inspected | **42 unique links; 0 broken** |
 | Facebook destination | `https://www.facebook.com/careerminute` applied across the site |
 | WhatsApp destination | `https://wa.me/8801814716713` applied as a quick-contact button and contact-channel link |
 | Logo asset | Available site-wide at `/assets/career-minute-logo.svg` |
@@ -28,8 +39,9 @@ The website now makes a strong first impression as a **career-document and perso
 | Page title, meta description, canonical URL | Present on all 12 public pages |
 | Bengali / English language controls | Present on all public page headers; **Bangla is the default** |
 | Sitemap and robots file | Available at `/sitemap.xml` and `/robots.txt` |
-| Production build | Passes with clean folder-route output |
-| JavaScript static syntax checks | Passed for order, page and language scripts |
+| Production build | Passes with clean folder-route output, static English routes and a 404 page |
+| Same-origin service API | Health, settings, order, contact, subscriber and protected admin routes tested |
+| JavaScript static syntax checks | Passed for order, page, language, analytics, settings, admin and server scripts |
 
 ### Public route inventory
 
@@ -93,20 +105,21 @@ The website now makes a strong first impression as a **career-document and perso
 
 ## Fault side / সীমাবদ্ধতা ও ঝুঁকি
 
-### P0 — complete before accepting real paid orders
+### P0 — configure before accepting real paid orders
 
-1. **No secure server-side order system yet**
-   - The current request and contact forms validate properly in the browser, but prototype submissions are stored in local browser storage.
-   - An audience member may believe their CV has been securely sent when it has not been delivered to an actual Career Minute inbox or dashboard.
+1. **Choose persistent, encrypted production storage**
+   - The same-origin server now accepts orders, messages and files; uploads are kept outside the public directory and admin access is protected.
+   - For a multi-server production deployment, mount encrypted persistent storage or replace the local storage adapter with managed PostgreSQL and private cloud object storage.
    - **Impact:** High. CVs and career documents contain sensitive personal data.
 
-2. **Payment is not connected**
-   - The journey correctly explains that payment follows scope review, but bKash, Nagad, Rocket, cards and SSLCommerz have not been configured because merchant details were not supplied.
+2. **Configure verified payment accounts**
+   - bKash, Nagad, Rocket and card / SSLCommerz settings, transaction ID capture, payment-proof upload and admin payment states are now ready.
+   - Merchant numbers, gateway URLs and payment instructions must be entered in `/admin/` before presenting a method to customers.
    - **Impact:** High for sales operations.
 
-3. **Email and WhatsApp operational policy is incomplete**
-   - WhatsApp has a live, correctly formatted link using **01814716713**.
-   - A business email address and stated business hours have not been provided or connected.
+3. **Configure operational contact details**
+   - WhatsApp is live with **01814716713** and an opening message.
+   - Set the business email, business hours and response policy in `/admin/`; optional Resend notification delivery also requires its API key.
    - **Impact:** Medium. Some visitors will expect a formal email route and response-time expectation.
 
 4. **Testimonials are presentation samples, not verified customer evidence**
@@ -119,16 +132,17 @@ The website now makes a strong first impression as a **career-document and perso
    - Canonical and sitemap URLs currently use `https://careerminute.com`.
    - If the live domain differs, these must be updated before indexing.
 
-6. **No Open Graph image yet**
-   - Social posts will inherit good title/description information, but a branded 1200×630 social-sharing image will materially improve Facebook sharing performance.
+6. **Open Graph image is ready; validate on the live domain**
+   - A branded social-sharing image has been added for Facebook and other social previews.
+   - Use Facebook Sharing Debugger after DNS is connected to refresh cached previews.
 
-7. **Language setup is client-side**
-   - Bangla is the default view and English can be selected, but the translated experience is generated in the browser.
-   - For maximum Bengali SEO, create permanently indexed Bangla and English page routes such as `/bn/services/cv/` and `/en/services/cv/` with translated page metadata and content rendered in the HTML.
+7. **Static English routes are ready; continue Bengali content QA**
+   - Bangla remains the default view and static English routes are available under `/en/` with reciprocal language tags.
+   - Before launch, ask a native Bangla copy editor to check final translation nuance, especially all legal and payment wording.
 
-8. **No analytics or Meta Pixel IDs connected**
-   - CTA clicks, form starts, submissions and Facebook campaign traffic cannot yet be measured.
-   - This makes it difficult to identify which service generates the most leads.
+8. **Analytics is implemented but IDs must be connected**
+   - Consent-aware CTA, form and page events are now supported through the API and optional GA4 / Meta Pixel configuration.
+   - Add the real IDs in `/admin/` and test events with GA4 DebugView and Meta Pixel Helper.
 
 9. **No live sample links**
    - The Samples page is visually effective, but serious portfolio buyers will gain more confidence from 2–4 approved live portfolio demos and real before/after CV examples.
@@ -193,5 +207,5 @@ For a Bangladeshi visitor arriving from Facebook, the website now answers the ke
 
 ## Final release recommendation
 
-**Approve the design and static deployment build.**  
-**Do not collect real customer CVs, payments or confidential documents until the P0 items are connected and tested.**
+**Approve the design, bilingual public site and deployment build.**
+**Before public payments and confidential file collection, configure and test the P0 operational settings: persistent storage, strong admin secrets, business email and verified merchant payment details.**

@@ -29,6 +29,30 @@
   }, { threshold: 0.12 });
   $$('.reveal').forEach((element) => revealObserver.observe(element));
 
+  // Audience-specific service guide
+  const fitRecommendations = {
+    student: { title: 'CV Foundation', copy: 'Build a clear CV around your education, skills, projects and potential—so you are ready for internships and first opportunities.', label: 'Start with a CV', href: '/order/?service=Professional%20CV' },
+    job: { title: 'CV Momentum', copy: 'Present your achievements with an ATS-ready CV, focused content and a professional structure for the role you want next.', label: 'Build my application CV', href: '/order/?service=Professional%20CV' },
+    portfolio: { title: 'Portfolio Website', copy: 'Turn your work, projects and professional point of view into one link that is ready to share with employers and clients.', label: 'Build my portfolio', href: '/order/?service=Portfolio%20Website' },
+    brand: { title: 'Personal Brand Pack', copy: 'Connect your CV, portfolio website and LinkedIn direction into a single professional presence.', label: 'Build my career profile', href: '/order/?service=Career%20Profile%20/%20Bundle' },
+  };
+  const banglaFitRecommendations = {
+    student: { title: 'CV ফাউন্ডেশন', copy: 'শিক্ষা, দক্ষতা, প্রজেক্ট ও সম্ভাবনাকে কেন্দ্র করে একটি সুস্পষ্ট CV তৈরি করুন—ইন্টার্নশিপ ও প্রথম সুযোগের জন্য প্রস্তুত থাকুন।', label: 'CV দিয়ে শুরু করুন', href: '/order/?service=Professional%20CV' },
+    job: { title: 'CV মোমেন্টাম', copy: 'আপনার পরবর্তী কাঙ্ক্ষিত পদের জন্য ATS-উপযোগী CV, লক্ষ্যভিত্তিক কনটেন্ট ও পেশাদার কাঠামোতে অর্জন তুলে ধরুন।', label: 'আমার আবেদন CV তৈরি করুন', href: '/order/?service=Professional%20CV' },
+    portfolio: { title: 'পোর্টফোলিও ওয়েবসাইট', copy: 'আপনার কাজ, প্রজেক্ট ও পেশাদার দৃষ্টিভঙ্গিকে একটি লিংকে পরিণত করুন যা নিয়োগকর্তা ও ক্লায়েন্টদের সঙ্গে শেয়ার করা যায়।', label: 'আমার পোর্টফোলিও তৈরি করুন', href: '/order/?service=Portfolio%20Website' },
+    brand: { title: 'পার্সোনাল ব্র্যান্ড প্যাক', copy: 'আপনার CV, পোর্টফোলিও ওয়েবসাইট ও লিংকডইন দিকনির্দেশনাকে একটি পেশাদার উপস্থিতিতে যুক্ত করুন।', label: 'আমার ক্যারিয়ার প্রোফাইল তৈরি করুন', href: '/order/?service=Career%20Profile%20/%20Bundle' },
+  };
+  $$('.fit-choice').forEach((choice) => choice.addEventListener('click', () => {
+    const recommendation = (document.documentElement.dataset.language === 'bn' ? banglaFitRecommendations : fitRecommendations)[choice.dataset.fit];
+    if (!recommendation) return;
+    $$('.fit-choice').forEach((item) => { const selected = item === choice; item.classList.toggle('active', selected); item.setAttribute('aria-selected', String(selected)); });
+    $('[data-fit-title]').textContent = recommendation.title;
+    $('[data-fit-copy]').textContent = recommendation.copy;
+    $('[data-fit-link]').href = recommendation.href;
+    $('[data-fit-link]').innerHTML = `${recommendation.label} <span>→</span>`;
+    window.CareerMinuteAnalytics?.track('service_guide_select', choice.dataset.fit);
+  }));
+
   // Feature solution tabs
   $$('.feature-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
@@ -194,42 +218,52 @@
     fileStatus.style.color = '#3b8e7d';
   });
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!validateStep(3)) return;
-    const data = Object.fromEntries(new FormData(form).entries());
-    const reference = `CM-${new Date().getFullYear()}${String(Math.floor(Math.random() * 9000) + 1000)}`;
-    const submission = { ...data, reference, submittedAt: new Date().toISOString(), file: fileInput.files?.[0]?.name || null };
+    const submitButton = $('button[type="submit"]', form);
+    const data = new FormData(form);
+    submitButton.disabled = true;
+    submitButton.textContent = 'Submitting…';
     try {
-      const submissions = JSON.parse(localStorage.getItem('careerMinuteRequests') || '[]');
-      submissions.push(submission);
-      localStorage.setItem('careerMinuteRequests', JSON.stringify(submissions));
-    } catch (_) { /* The confirmation still works when storage is unavailable. */ }
-    $('.success-name').textContent = data.fullName.split(' ')[0] || 'there';
-    $('.order-reference').textContent = reference;
-    $$('.form-step', form).forEach((item) => item.style.display = 'none');
-    $('.form-success', form).classList.add('visible');
-    progressCurrent.textContent = 'Request submitted';
-    progressBar.style.width = '100%';
-    window.setTimeout(() => {
-      window.location.assign(`/thank-you/?ref=${encodeURIComponent(reference)}&name=${encodeURIComponent(data.fullName || '')}&service=${encodeURIComponent(data.service || '')}`);
-    }, 800);
+      const response = await fetch('/api/orders', { method: 'POST', body: data, credentials: 'same-origin' });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Your request could not be submitted.');
+      const fullName = data.get('fullName') || '';
+      const service = data.get('service') || '';
+      $('.success-name').textContent = fullName.split(' ')[0] || 'there';
+      $('.order-reference').textContent = result.reference;
+      $$('.form-step', form).forEach((item) => item.style.display = 'none');
+      $('.form-success', form).classList.add('visible');
+      progressCurrent.textContent = 'Request submitted';
+      progressBar.style.width = '100%';
+      window.CareerMinuteAnalytics?.track('order_submit', service);
+      window.setTimeout(() => window.location.assign(`/thank-you/?ref=${encodeURIComponent(result.reference)}&name=${encodeURIComponent(fullName)}&service=${encodeURIComponent(service)}`), 800);
+    } catch (error) {
+      errorFor('consent', error.message || 'Unable to submit right now. Please message us on WhatsApp.');
+      submitButton.disabled = false;
+      submitButton.innerHTML = 'Submit request <span>→</span>';
+    }
   });
 
-  // Newsletter lead capture is intentionally local until email provider is connected.
-  $('#newsletter-form')?.addEventListener('submit', (event) => {
+  $('#newsletter-form')?.addEventListener('submit', async (event) => {
     event.preventDefault();
     const email = $('#newsletter-email').value.trim();
-    if (!email || !$('#newsletter-email').checkValidity()) {
+    const name = $('#newsletter-name').value.trim();
+    if (!name || !email || !$('#newsletter-email').checkValidity()) {
       $('#newsletter-email').focus();
       return;
     }
     try {
-      const subscribers = JSON.parse(localStorage.getItem('careerMinuteNewsletter') || '[]');
-      if (!subscribers.includes(email)) subscribers.push(email);
-      localStorage.setItem('careerMinuteNewsletter', JSON.stringify(subscribers));
-    } catch (_) { /* no-op */ }
-    event.currentTarget.reset();
-    showToast('You’re on the Career Minute notes list. Welcome.');
+      const response = await fetch('/api/subscribers', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ email, name }) });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Unable to join the list.');
+      event.currentTarget.reset();
+      window.CareerMinuteAnalytics?.track('newsletter_subscribe');
+      const checklistPath = document.documentElement.dataset.language === 'en' ? '/en/cv-checklist/' : (result.downloadUrl || '/cv-checklist/');
+      window.location.assign(checklistPath);
+    } catch (error) {
+      showToast(error.message || 'Unable to subscribe right now. Please try again later.');
+    }
   });
 })();

@@ -1,0 +1,23 @@
+{
+  "brandName": "Career Minute",
+  "businessEmail": "",
+  "businessHours": "Saturday–Thursday, 10:00 AM–8:00 PM",
+  "whatsappNumber": "8801814716713",
+  "facebookUrl": "https://www.facebook.com/careerminute",
+  "analytics": {
+    "googleMeasurementId": "",
+    "metaPixelId": ""
+  },
+  "payment": {
+    "bKash": { "enabled": false, "account": "", "instruction": "" },
+    "Nagad": { "enabled": false, "account": "", "instruction": "" },
+    "Rocket": { "enabled": false, "account": "", "instruction": "" },
+    "Card": { "enabled": false, "account": "", "instruction": "" }
+  },
+  "packages": {
+    "cv-foundation": { "name": "CV Foundation", "price": "", "deliveryDays": "", "revisions": "" },
+    "cv-momentum": { "name": "CV Momentum", "price": "", "deliveryDays": "", "revisions": "" },
+    "portfolio-showcase": { "name": "Portfolio Showcase", "price": "", "deliveryDays": "", "revisions": "" },
+    "personal-brand-pack": { "name": "Personal Brand Pack", "price": "", "deliveryDays": "", "revisions": "" }
+  }
+}

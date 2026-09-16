@@ -4,3 +4,6 @@ dist/
 .DS_Store
 .env
 .env.*
+!.env.example
+data/
+config/site-settings.json

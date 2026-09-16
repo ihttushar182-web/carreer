@@ -1,0 +1,8 @@
+node_modules
+dist
+data
+config/site-settings.json
+.env
+.git
+.gitignore
+npm-debug.log
