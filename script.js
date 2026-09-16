@@ -2,7 +2,8 @@
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
   const $ = (selector, scope = document) => scope.querySelector(selector);
 
-  $('#year').textContent = new Date().getFullYear();
+  const yearElement = $('#year');
+  if (yearElement) yearElement.textContent = new Date().getFullYear();
 
   // Compact mobile navigation
   const menuButton = $('.menu-button');
@@ -210,6 +211,9 @@
     $('.form-success', form).classList.add('visible');
     progressCurrent.textContent = 'Request submitted';
     progressBar.style.width = '100%';
+    window.setTimeout(() => {
+      window.location.assign(`/thank-you/?ref=${encodeURIComponent(reference)}&name=${encodeURIComponent(data.fullName || '')}&service=${encodeURIComponent(data.service || '')}`);
+    }, 800);
   });
 
   // Newsletter lead capture is intentionally local until email provider is connected.
