@@ -24,6 +24,7 @@ The website now makes a strong first impression as a **career-document and perso
 | Facebook destination | `https://www.facebook.com/careerminute` applied across the site |
 | WhatsApp destination | `https://wa.me/8801814716713` applied as a quick-contact button and contact-channel link |
 | Logo asset | Available site-wide at `/assets/career-minute-logo.svg` |
+| Human realistic-cartoon artwork | Present on all 12 public pages; all character images have descriptive alt text |
 | Page title, meta description, canonical URL | Present on all 12 public pages |
 | Bengali / English language controls | Present on all public page headers; **Bangla is the default** |
 | Sitemap and robots file | Available at `/sitemap.xml` and `/robots.txt` |
@@ -66,6 +67,7 @@ The website now makes a strong first impression as a **career-document and perso
 
 - The logo is consistently used in the header, footer, forms, thank-you flow and browser favicon.
 - Motion graphics are career-relevant rather than decorative: moving CV cards, portfolio-browser scenes, progression indicators, animated document shapes and subtle orbit effects.
+- Every public page now contains a semi-realistic cartoon professional—career starter, designer, creative freelancer, experienced professional or mentor—with a subtle floating motion treatment.
 - The design does not rely on generic stock photography; it feels more ownable and private for a career-services brand.
 
 ### 4. Mobile usability
