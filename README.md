@@ -17,6 +17,8 @@ A responsive, multi-page service-commerce website for **Career Minute** — prof
 - `/thank-you/` — Confirmation page with return-home action
 - `/policies/` — Privacy, terms, refund, delivery, revision and file-handling policies
 
+Bangla is the default visitor language. The persistent language switcher provides an English experience and supports shareable `?lang=en` links.
+
 ## Local development
 
 ```bash
