@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# Update Sitemap with the production domain before launch.
