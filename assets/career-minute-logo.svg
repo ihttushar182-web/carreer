@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Career Minute logo</title>
+  <desc id="desc">A blue career arrow, a dark monogram and clock, and a green upward arrow.</desc>
+  <defs>
+    <linearGradient id="blue" x1="43" y1="92" x2="334" y2="372" gradientUnits="userSpaceOnUse"><stop stop-color="#0E47EE"/><stop offset="1" stop-color="#1648D9"/></linearGradient>
+    <linearGradient id="green" x1="374" y1="231" x2="457" y2="147" gradientUnits="userSpaceOnUse"><stop stop-color="#A6EC1E"/><stop offset="1" stop-color="#95EC18"/></linearGradient>
+  </defs>
+  <path fill="url(#blue)" d="M177 396C93 376 48 313 54 229 61 139 139 77 227 76c51-1 98 19 132 56l54 60c12 14 2 35-17 35h-59c-14 0-25-11-25-25v-18c-22-21-51-33-82-33-60 0-109 49-109 109 0 52 37 96 88 106l-32 30Z"/>
+  <path fill="#071B38" d="M204 197c15 0 29 6 40 17l54 55 55-55c11-11 25-17 40-17 31 0 55 25 55 56v60c45 19 77 63 77 114 0 68-55 123-123 123-55 0-102-36-117-86h-1V281l-16 16-34-33v159c0 51-41 92-92 92-52 0-93-41-93-92V253c0-31 25-56 55-56 16 0 30 6 41 17l59 60 55-60c11-11 25-17 41-17Zm192 186v38c0 10 5 19 14 24l43 25c11 7 26 3 33-9 6-11 2-25-9-32l-34-20v-26c0-13-10-24-24-24s-23 10-23 24Z"/>
+  <path fill="url(#green)" d="m422 140 47-10c16-3 28 10 25 25l-10 47c-3 16-23 22-35 11l-8-8-45 45c-10 10-26 10-36 0-10-10-10-26 0-36l45-45-8-8c-11-11-5-31 10-34Z"/>
+</svg>
