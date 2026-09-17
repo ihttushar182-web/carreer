@@ -5,6 +5,7 @@ A responsive, multi-page service-commerce website for **Career Minute** — prof
 ## Pages
 
 - `/` — Home
+- `/cv/` — Focused professional-CV sales landing page
 - `/services/` — All services
 - `/services/cv/` — Professional CV service
 - `/services/portfolio-website/` — Portfolio website service

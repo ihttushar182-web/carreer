@@ -23,6 +23,7 @@ The website now makes a strong first impression as a **career-document and perso
 - Added a free CV Checklist lead capture and a visitor decision helper for students, job applicants, portfolio buyers and personal-brand clients.
 - Added static English routes under `/en/` with reciprocal Bangla/English `hreflang` tags, while Bangla remains the default path.
 - Added a reference-and-email order-status page so customers can privately follow payment and production status after submission.
+- Added a dedicated, high-converting professional CV sales landing page at `/cv/` and `/en/cv/`, with strong sales CTAs, package configuration, process explanation and FAQ.
 - Added a 404 response page, social-sharing image and Docker deployment file.
 
 ---
@@ -31,12 +32,12 @@ The website now makes a strong first impression as a **career-document and perso
 
 | Check | Result |
 | --- | --- |
-| Production routes and assets checked | **32 / 32 returned HTTP 200** |
+| Production routes and assets checked | **34 / 34 returned HTTP 200** |
 | Internal local links inspected | **All public local links; 0 broken** |
 | Facebook destination | `https://www.facebook.com/careerminute` applied across the site |
 | WhatsApp destination | `https://wa.me/8801814716713` applied as a quick-contact button and contact-channel link |
 | Logo asset | Available site-wide at `/assets/career-minute-logo.svg` |
-| Human realistic-cartoon artwork | Present on all 29 public pages; all character images have descriptive alt text |
+| Human realistic-cartoon artwork | Present on all 31 public pages; all character images have descriptive alt text |
 | Page title, meta description, canonical URL | Present on indexable public marketing pages |
 | Bengali / English language controls | Static Bangla-default and English routes are available; **Bangla is the default** |
 | Sitemap and robots file | Available at `/sitemap.xml` and `/robots.txt` |
@@ -47,6 +48,7 @@ The website now makes a strong first impression as a **career-document and perso
 ### Public route inventory
 
 - `/`
+- `/cv/` — focused professional CV sales landing page
 - `/services/`
 - `/services/cv/`
 - `/services/portfolio-website/`

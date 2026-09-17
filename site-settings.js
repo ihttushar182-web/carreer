@@ -18,7 +18,7 @@
       const packageInfo = settings.packages?.[element.dataset.packagePrice]
       const price = formatPrice(packageInfo?.price)
       if (!price) return
-      const isBangla = document.documentElement.dataset.language !== 'en'
+      const isBangla = (document.documentElement.dataset.language || document.documentElement.lang) !== 'en'
       const delivery = packageInfo.deliveryDays ? ` · ${packageInfo.deliveryDays} ${isBangla ? 'দিন' : 'days'}` : ''
       const revisions = packageInfo.revisions ? ` · ${packageInfo.revisions} ${isBangla ? 'রিভিশন' : 'revisions'}` : ''
       const label = isBangla ? 'প্যাকেজ শুরু' : 'Starting package'

@@ -31,7 +31,7 @@
   }
   function renderConsent() {
     if (localStorage.getItem(consentKey)) { if (localStorage.getItem(consentKey) === 'accepted') enableTracking(); return }
-    const bangla = document.documentElement.dataset.language !== 'en'
+    const bangla = (document.documentElement.dataset.language || document.documentElement.lang) !== 'en'
     const banner = document.createElement('aside')
     banner.className = 'analytics-consent'
     banner.setAttribute('aria-label', bangla ? 'অ্যানালিটিক্স পছন্দ' : 'Analytics preference')
