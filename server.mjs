@@ -162,7 +162,7 @@ async function sendOrderEmail(order, settings) {
   // Optional Resend integration: notify the business and provide the customer a clear request reference.
   const messages = []
   if (settings.businessEmail) messages.push({ to: [settings.businessEmail], subject: `New Career Minute request ${order.reference}`, text: `A new ${order.service} request was submitted by ${order.fullName}. Reference: ${order.reference}. Log in to the admin area to review it.` })
-  if (order.email) messages.push({ to: [order.email], subject: `Career Minute received your request ${order.reference}`, text: `Hello ${order.fullName}, Career Minute has received your ${order.service} request. Your reference is ${order.reference}. We will review your information and follow up with the next steps, scope and payment instructions.` })
+  if (order.email) messages.push({ to: [order.email], subject: `Career Minute received your request ${order.reference}`, text: `Hello ${order.fullName}, Career Minute has received your ${order.service} request. Your reference is ${order.reference}. You can check the production status at https://careerminute.com/track-order/ using this reference and your email address. We will review your information and follow up with the next steps, scope and payment instructions.` })
   await Promise.all(messages.map(sendResendEmail))
 }
 
@@ -199,16 +199,32 @@ app.post('/api/orders', upload.fields([{ name: 'file', maxCount: 1 }, { name: 'p
     const files = req.files || {}
     const document = files.file?.[0]
     const paymentScreenshot = files.paymentScreenshot?.[0]
+    const data = await readData()
+    let reference = createReference()
+    let attempts = 0
+    while (data.orders.some((item) => item.reference === reference) && attempts < 20) { reference = createReference(); attempts += 1 }
+    if (data.orders.some((item) => item.reference === reference)) throw new Error('Unable to create a unique request reference.')
     const order = {
-      id: createId('order'), reference: createReference(), service, fullName, email, phone, profession, goal,
+      id: createId('order'), reference, service, fullName, email, phone, profession, goal,
       status: 'new', paymentStatus: transactionId ? 'pending' : 'pending', paymentMethod, transactionId,
       document: document ? { fileName: clean(document.originalname, 180), storageName: document.filename, mime: document.mimetype, size: document.size } : null,
       paymentScreenshot: paymentScreenshot ? { fileName: clean(paymentScreenshot.originalname, 180), storageName: paymentScreenshot.filename, mime: paymentScreenshot.mimetype, size: paymentScreenshot.size } : null,
       adminNote: '', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
     }
-    const data = await readData(); data.orders.unshift(order); await writeData(data)
+    data.orders.unshift(order); await writeData(data)
     const settings = await readSettings(); await sendOrderEmail(order, settings)
     res.status(201).json({ reference: order.reference, status: order.status })
+  } catch (error) { next(error) }
+})
+app.post('/api/orders/track', async (req, res, next) => {
+  try {
+    const reference = clean(req.body.reference, 20).toUpperCase()
+    const email = clean(req.body.email, 180).toLowerCase()
+    if (!/^CM-\d{8}$/.test(reference) || !validEmail(email)) return res.status(422).json({ error: 'Enter the reference number and email used for your request.' })
+    const data = await readData()
+    const order = data.orders.find((item) => item.reference === reference && item.email === email)
+    if (!order) return res.status(404).json({ error: 'We could not match a request with those details. Check your reference and email, then try again.' })
+    return res.json({ order: { reference: order.reference, service: order.service, status: order.status, paymentStatus: order.paymentStatus, createdAt: order.createdAt, updatedAt: order.updatedAt } })
   } catch (error) { next(error) }
 })
 app.post('/api/contact', async (req, res, next) => {

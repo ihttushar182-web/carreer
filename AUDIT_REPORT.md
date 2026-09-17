@@ -8,7 +8,7 @@
 
 The website now makes a strong first impression as a **career-document and personal-brand platform**, not simply a CV maker. Its clearest journey is:
 
-> Home → choose CV / portfolio / career service → order request → request confirmation → thank-you page → return home.
+> Home → choose CV / portfolio / career service → secure order request → confirmation reference → payment / production updates → private order-status tracking → delivery.
 
 **Frontend/static deployment readiness: 9 / 10**
 **Live commerce/data-operation readiness: 7.5 / 10** — the same-origin API, private upload handling, admin workspace, payment-verification workflow and consent-aware analytics are now implemented. Verified merchant payment details, a production business email, persistent encrypted storage and authentic testimonials remain business-launch configuration tasks.
@@ -22,6 +22,7 @@ The website now makes a strong first impression as a **career-document and perso
 - Added a privacy-choice banner; analytics starts only after visitor consent.
 - Added a free CV Checklist lead capture and a visitor decision helper for students, job applicants, portfolio buyers and personal-brand clients.
 - Added static English routes under `/en/` with reciprocal Bangla/English `hreflang` tags, while Bangla remains the default path.
+- Added a reference-and-email order-status page so customers can privately follow payment and production status after submission.
 - Added a 404 response page, social-sharing image and Docker deployment file.
 
 ---
@@ -30,14 +31,14 @@ The website now makes a strong first impression as a **career-document and perso
 
 | Check | Result |
 | --- | --- |
-| Production routes and assets checked | **31 / 31 returned HTTP 200** |
-| Internal local links inspected | **42 unique links; 0 broken** |
+| Production routes and assets checked | **32 / 32 returned HTTP 200** |
+| Internal local links inspected | **All public local links; 0 broken** |
 | Facebook destination | `https://www.facebook.com/careerminute` applied across the site |
 | WhatsApp destination | `https://wa.me/8801814716713` applied as a quick-contact button and contact-channel link |
 | Logo asset | Available site-wide at `/assets/career-minute-logo.svg` |
-| Human realistic-cartoon artwork | Present on all 12 public pages; all character images have descriptive alt text |
-| Page title, meta description, canonical URL | Present on all 12 public pages |
-| Bengali / English language controls | Present on all public page headers; **Bangla is the default** |
+| Human realistic-cartoon artwork | Present on all 29 public pages; all character images have descriptive alt text |
+| Page title, meta description, canonical URL | Present on indexable public marketing pages |
+| Bengali / English language controls | Static Bangla-default and English routes are available; **Bangla is the default** |
 | Sitemap and robots file | Available at `/sitemap.xml` and `/robots.txt` |
 | Production build | Passes with clean folder-route output, static English routes and a 404 page |
 | Same-origin service API | Health, settings, order, contact, subscriber and protected admin routes tested |
@@ -56,7 +57,9 @@ The website now makes a strong first impression as a **career-document and perso
 - `/contact/`
 - `/order/`
 - `/thank-you/`
+- `/track-order/` — private reference-and-email tracking
 - `/policies/`
+- Matching static English public routes under `/en/`
 
 ---
 
@@ -72,7 +75,7 @@ The website now makes a strong first impression as a **career-document and perso
 
 - The primary CTA appears in the header, hero, service cards, pricing areas and the final CTA.
 - Service requests can start from the homepage or a dedicated order page.
-- The thank-you screen gives the visitor a reference number, explains what happens next and provides a return-to-home action.
+- The thank-you screen gives the visitor a reference number, explains what happens next and links straight to private order-status tracking.
 - Facebook and WhatsApp are visible as quick contact options for visitors who prefer conversation before ordering.
 
 ### 3. Professional visual language
@@ -99,7 +102,7 @@ The website now makes a strong first impression as a **career-document and perso
 - Every public page has its own title, meta description, canonical URL and Open Graph fundamentals.
 - The homepage has ProfessionalService schema and the existing Facebook page is included as a social profile.
 - `robots.txt`, `sitemap.xml`, readable heading hierarchy and clean URLs are in place.
-- Bengali is the default visitor language. The **EN** control enables English through the language preference / URL parameter.
+- Bengali is the default visitor language. Dedicated static English pages are available under `/en/`, with reciprocal language metadata.
 
 ---
 
@@ -160,8 +163,8 @@ The website now makes a strong first impression as a **career-document and perso
 2. Add a small “Typical response time” promise near WhatsApp and the order form, for example: **“Replies within business hours.”**
 3. Add 3–6 authentic testimonials with permission, service name, profession and optionally a blurred profile image.
 4. Add approved CV before/after samples and at least two live personal-portfolio demos.
-5. Publish a lead magnet: **Free CV Checklist / ক্যারিয়ার ডকুমেন্ট চেকলিস্ট** in exchange for name and email.
-6. Add a short “Why this service?” decision helper for students, experienced candidates and freelancers.
+5. The **Free CV Checklist / ক্যারিয়ার ডকুমেন্ট চেকলিস্ট** lead magnet is now live; connect a real email sequence if ongoing follow-up is required.
+6. The service decision helper is now live; review its CTA performance after analytics IDs are connected.
 
 ### Highest-value trust improvements
 
@@ -186,10 +189,10 @@ The website now makes a strong first impression as a **career-document and perso
 
 ### Technical production improvements
 
-1. Replace browser local-storage submissions with a Node.js API and PostgreSQL order database.
-2. Create admin login, order statuses, customer file storage, request notes and payment-verification controls.
-3. Send order confirmation via email and/or WhatsApp after secure server receipt.
-4. Use cloud storage with signed/private URLs; never expose submitted CV documents publicly.
+1. The browser local-storage prototype has been replaced with a same-origin Node.js API. Migrate the local private data adapter to PostgreSQL for a multi-server production setup.
+2. Admin login, order statuses, customer file storage, request notes, payment-verification controls and private customer tracking are implemented.
+3. Optional Resend order-confirmation emails are implemented; configure the real business email, verified sender and API key before launch.
+4. Use cloud storage with signed/private URLs for scale; submitted CV documents are not exposed publicly.
 5. Perform Lighthouse, accessibility, form-security and cross-browser tests on the staging domain.
 
 ---
@@ -203,7 +206,7 @@ For a Bangladeshi visitor arriving from Facebook, the website now answers the ke
 3. **Which service suits me?** Dedicated service and pricing pages make the choice clear.
 4. **Can I talk to someone first?** Yes—Facebook and WhatsApp are one tap away.
 5. **What happens when I order?** The order page and thank-you page communicate the review, confirmation and delivery process.
-6. **Can I trust the process?** The policy pages, clear claims, professional layout and explanations build confidence; verified testimonials and a live secure backend are the remaining critical trust upgrades.
+6. **Can I trust the process?** The policy pages, clear claims, protected server-side request flow, private file handling and reference-and-email tracking build confidence; verified testimonials and final operational configuration remain the critical trust upgrades.
 
 ## Final release recommendation
 

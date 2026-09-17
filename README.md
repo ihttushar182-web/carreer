@@ -14,7 +14,8 @@ A responsive, multi-page service-commerce website for **Career Minute** — prof
 - `/faq/` — Frequently asked questions
 - `/contact/` — Contact form and Facebook channel
 - `/order/` — Project purchase/request flow
-- `/thank-you/` — Confirmation page with return-home action
+- `/thank-you/` — Confirmation page with return-home and order-status action
+- `/track-order/` — Private reference-and-email order-status lookup
 - `/policies/` — Privacy, terms, refund, delivery, revision and file-handling policies
 
 Bangla is the default visitor language. The persistent language switcher provides full static English routes under `/en/`, for example `/en/services/cv/`; these routes use reciprocal Bangla/English `hreflang` metadata for search engines.
@@ -35,7 +36,7 @@ npm run build
 npm run preview
 ```
 
-The production-ready static files are generated in `dist/`. All clean URLs are emitted as folder routes with `index.html` files, so they work on Netlify, Vercel, Cloudflare Pages, cPanel static hosting and similar platforms.
+The production-ready static files are generated in `dist/`. All clean URLs are emitted as folder routes with `index.html` files. Use a static host only for the public marketing pages; order submissions, private uploads, tracking and the admin workspace require the same-origin Express server described below.
 
 ## Secure order API and admin workspace
 
@@ -86,9 +87,9 @@ Vite proxies `/api` requests to the API server, so browser code uses only same-o
 7. Connect analytics and conversion events (GA4 / Meta Pixel) using the production IDs in `/admin/`.
 8. Replace demonstration testimonials with approved customer reviews and live sample links.
 
-## Form behavior in this build
+## Form and tracking behavior in this build
 
-Order, contact and CV Checklist forms post to the same-origin API. The order API validates required fields, validates supported uploads (PDF, DOC, DOCX, JPG, PNG; maximum 10 MB), creates a Career Minute reference and stores requests privately for the admin workspace. Customer tracking only starts after visitors accept the optional analytics preference.
+Order, contact and CV Checklist forms post to the same-origin API. The order API validates required fields, validates supported uploads (PDF, DOC, DOCX, JPG, PNG; maximum 10 MB), creates a Career Minute reference and stores requests privately for the admin workspace. Customers can use `/track-order/` with that reference plus the email used in their request to see only the request, payment and production statuses—not private contact details, notes or files. Consent-aware analytics starts only after a visitor accepts the optional analytics preference.
 
 ## Brand
 
