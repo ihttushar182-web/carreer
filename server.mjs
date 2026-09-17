@@ -171,7 +171,7 @@ async function sendResendEmail(message) {
     await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: process.env.EMAIL_FROM || 'Career Minute <orders@careerminute.com>', ...message }),
+      body: JSON.stringify({ from: process.env.EMAIL_FROM || 'Career Minute <orders@careerminute.site>', ...message }),
     })
   } catch { /* email delivery failures never expose private form content to the visitor */ }
 }
@@ -183,7 +183,7 @@ async function sendOrderEmail(order, settings) {
     const paymentNote = order.transactionId
       ? ` We received your ${order.paymentMethod} Transaction ID (${order.transactionId}). It is pending manual verification; payment is not approved until an authenticated Career Minute admin reviews it.`
       : ' We will review your information and follow up with the next steps and scope.'
-    messages.push({ to: [order.email], subject: `Career Minute received your request ${order.reference}`, text: `Hello ${order.fullName}, Career Minute has received your ${order.service} request. Your reference is ${order.reference}. You can check the production status at https://careerminute.com/track-order/ using this reference and your email address.${paymentNote}` })
+    messages.push({ to: [order.email], subject: `Career Minute received your request ${order.reference}`, text: `Hello ${order.fullName}, Career Minute has received your ${order.service} request. Your reference is ${order.reference}. You can check the production status at https://careerminute.site/track-order/ using this reference and your email address.${paymentNote}` })
   }
   await Promise.all(messages.map(sendResendEmail))
 }

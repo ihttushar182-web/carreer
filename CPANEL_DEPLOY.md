@@ -6,12 +6,12 @@ This project is a **Node.js application**, not a static-only website. The same E
 
 ## 1. Prepare the domain
 
-At the time this guide was added, `careerminute.com` did not resolve in public DNS. Before testing on the main domain, do one of the following with the domain registrar:
+`careerminute.site` resolves to the supplied hosting IP, but its public HTTPS endpoint must still be configured and verified after the cPanel application is deployed. Before testing on the main domain, confirm the DNS records are correct with the domain registrar:
 
 - point the domain to the hosting provider's nameservers; or
-- add the records supplied by the cPanel host, usually `A` for `@` to the server IP and `CNAME` for `www` to `careerminute.com`.
+- add the records supplied by the cPanel host, usually `A` for `@` to the server IP and `CNAME` for `www` to `careerminute.site`.
 
-Then add `careerminute.com` in **cPanel → Domains**. DNS propagation can take time. Do not enable Force HTTPS Redirect until the certificate is issued.
+Then add `careerminute.site` in **cPanel → Domains**. DNS propagation can take time. Do not enable Force HTTPS Redirect until the certificate is issued.
 
 ## 2. Upload the project outside `public_html`
 
@@ -40,7 +40,7 @@ Open **cPanel → Setup Node.js App** and choose **Create Application**.
 | Node.js version | Node 20 LTS or newer |
 | Application mode | Production |
 | Application root | `career-minute` |
-| Application URL | `careerminute.com/` |
+| Application URL | `careerminute.site/` |
 | Application startup file | `app.js` |
 
 The `app.js` launcher is included specifically for cPanel application managers. It starts `server.mjs`, which automatically uses cPanel's `PORT` value. **Do not manually set `PORT`.**
@@ -99,7 +99,7 @@ Payment submissions remain **Pending verification** until an authenticated admin
 Once DNS points to the host:
 
 1. Run **cPanel → SSL/TLS Status → Run AutoSSL**.
-2. Confirm that `https://careerminute.com` opens without a certificate warning.
+2. Confirm that `https://careerminute.site` opens without a certificate warning.
 3. Enable **Domains → Force HTTPS Redirect**.
 
 ## 7. Deployment smoke tests
@@ -107,9 +107,9 @@ Once DNS points to the host:
 Run these after restarting the application:
 
 ```bash
-curl -fsS https://careerminute.com/api/health
-curl -fsS https://careerminute.com/api/settings
-curl -fsSI https://careerminute.com/
+curl -fsS https://careerminute.site/api/health
+curl -fsS https://careerminute.site/api/settings
+curl -fsSI https://careerminute.site/
 ```
 
 Expected results:

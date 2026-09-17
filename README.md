@@ -83,7 +83,7 @@ Vite proxies `/api` requests to the API server, so browser code uses only same-o
 
 ## Before public launch
 
-1. Point `careerminute.com` (or update canonical, Open Graph and sitemap URLs if a different domain is used).
+1. Point `careerminute.site` (or update canonical, Open Graph and sitemap URLs if a different domain is used).
 2. Set strong production `ADMIN_PASSWORD` and `SESSION_SECRET` values; do not use the example values.
 3. Add the approved business email, business hours and verified payment details in `/admin/`.
 4. Add verified bKash, Nagad, Rocket, card or SSLCommerz payment settings and test the verification process.

@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://careerminute.com/sitemap.xml
+Sitemap: https://careerminute.site/sitemap.xml
