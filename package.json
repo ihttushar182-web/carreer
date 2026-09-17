@@ -7,7 +7,7 @@
     "dev:api": "node --watch server.mjs",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "start": "node server.mjs"
+    "start": "NODE_ENV=production node server.mjs"
   },
   "dependencies": {
     "dotenv": "^17.2.2",
