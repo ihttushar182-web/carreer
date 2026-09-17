@@ -62,6 +62,10 @@ docker run --env-file .env -p 8787:8787 -v career-minute-data:/app/data career-m
 
 Put the container behind an HTTPS reverse proxy and store the persistent `data` volume on encrypted infrastructure.
 
+### cPanel deployment
+
+A cPanel host must support **Setup Node.js App / Node.js Selector**; static-only cPanel hosting cannot run the order, upload, tracking, and admin API. The cPanel-friendly `app.js` startup launcher and a complete deployment, environment-variable, SSL, persistence, and smoke-test guide are in [CPANEL_DEPLOY.md](CPANEL_DEPLOY.md).
+
 - Uploaded CVs/payment proofs are validated and saved outside the public web directory (`data/uploads/`).
 - Request and contact content is sanitized and rate limited.
 - Admin sessions use HttpOnly, SameSite cookies and expire after 12 hours.
