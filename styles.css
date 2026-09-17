@@ -159,3 +159,54 @@ html[lang="bn"] .cv-sale-body { font-family:"Hind Siliguri",var(--font); }.cv-sa
 @keyframes homeCharacterFloat { 0%,100% { transform:translate3d(var(--character-x, 0px),var(--character-y, 0px),0) rotate(-1.8deg); } 50% { transform:translate3d(var(--character-x, 0px),calc(var(--character-y, 0px) - 14px),0) rotate(1.8deg); } }
 @media(max-width:720px) { .home-character-strip { --character-opacity:.66; }.home-character-services { --character-opacity:.84; }.home-character-fit,.home-character-statement,.home-character-feature,.home-character-why,.home-character-process,.home-character-pricing,.home-character-work,.home-character-testimonial,.home-character-faq,.home-character-resource,.home-character-final { --character-opacity:.34; } }
 .hero-human-wrap { will-change:transform; animation:heroCandidateFloat 5.5s ease-in-out infinite; } @keyframes heroCandidateFloat { 0%,100% { transform:translate3d(var(--character-x, 0px),var(--character-y, 0px),0) rotate(-1deg); } 50% { transform:translate3d(var(--character-x, 0px),calc(var(--character-y, 0px) - 11px),0) rotate(1deg); } }
+
+/* Foreground professionals: transparent cut-outs, with section-specific work gestures. */
+.with-home-character { overflow:clip; }
+.with-home-character > :not(.home-section-character) { z-index:2; }
+.home-section-character {
+  z-index:3;
+  object-fit:contain;
+  object-position:center bottom;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  filter:drop-shadow(0 15px 16px rgba(16,49,66,.20));
+}
+.home-section-character.character-in-view { opacity:var(--character-opacity,1); }
+.home-character-strip,.home-character-services,.home-character-fit,.home-character-statement,.home-character-feature,.home-character-why,.home-character-process,.home-character-pricing,.home-character-work,.home-character-testimonial,.home-character-faq,.home-character-resource,.home-character-final { --character-opacity:1; }
+.statement-band .home-section-character,.process-section .home-section-character,.testimonial-section .home-section-character,.final-cta .home-section-character { filter:drop-shadow(0 15px 18px rgba(0,0,0,.22)); }
+
+/* The hero candidate is no longer contained in a portrait card: they stand among the CV and portfolio evidence. */
+.hero-human-wrap { left:151px; top:18px; width:282px; height:474px; background:transparent; box-shadow:none; border-radius:0; }
+.hero-human-wrap .home-character { object-fit:contain; object-position:center bottom; border-radius:0; filter:drop-shadow(0 18px 18px rgba(0,0,0,.24)); }
+.hero-human-wrap .online-badge { right:63px; bottom:36px; }
+
+/* Different restrained poses keep a reviewing, creating or presenting professional from floating in sync. */
+.home-character-strip,.home-character-services,.home-character-fit,.home-character-why,.home-character-faq { animation-name:homeCharacterReview; }
+.home-character-statement,.home-character-feature,.home-character-work,.home-character-resource { animation-name:homeCharacterCreate; }
+.home-character-process,.home-character-pricing,.home-character-testimonial,.home-character-final { animation-name:homeCharacterPresent; }
+@keyframes homeCharacterReview {
+  0%,100% { transform:translate3d(var(--character-x,0px),var(--character-y,0px),0) rotate(-1.1deg); }
+  45% { transform:translate3d(var(--character-x,0px),calc(var(--character-y,0px) - 7px),0) rotate(.8deg); }
+  70% { transform:translate3d(var(--character-x,0px),calc(var(--character-y,0px) - 4px),0) rotate(-.2deg); }
+}
+@keyframes homeCharacterCreate {
+  0%,100% { transform:translate3d(var(--character-x,0px),var(--character-y,0px),0) rotate(.8deg); }
+  50% { transform:translate3d(var(--character-x,0px),calc(var(--character-y,0px) - 8px),0) rotate(-1deg); }
+}
+@keyframes homeCharacterPresent {
+  0%,100% { transform:translate3d(var(--character-x,0px),var(--character-y,0px),0) rotate(-.5deg); }
+  50% { transform:translate3d(var(--character-x,0px),calc(var(--character-y,0px) - 7px),0) rotate(1.1deg); }
+}
+@media(max-width:720px) {
+  .home-section-character { filter:drop-shadow(0 9px 10px rgba(16,49,66,.18)); }
+  .home-character-strip { --character-opacity:.92; }
+  .home-character-services { --character-opacity:.9; }
+  .home-character-fit,.home-character-statement,.home-character-feature,.home-character-why,.home-character-process,.home-character-pricing,.home-character-work,.home-character-testimonial,.home-character-faq,.home-character-resource,.home-character-final { --character-opacity:.78; }
+  .hero-human-wrap { left:144px; top:8px; width:268px; height:454px; }
+  .hero-human-wrap .online-badge { right:59px; bottom:42px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .home-section-character,.hero-human-wrap { animation:none!important; transform:none!important; }
+}

@@ -1,4 +1,5 @@
 {
+  "settingsVersion": 2,
   "brandName": "Career Minute",
   "businessEmail": "",
   "businessHours": "Saturday–Thursday, 10:00 AM–8:00 PM",
@@ -9,8 +10,16 @@
     "metaPixelId": ""
   },
   "payment": {
-    "bKash": { "enabled": false, "account": "", "instruction": "" },
-    "Nagad": { "enabled": false, "account": "", "instruction": "" },
+    "bKash": {
+      "enabled": true,
+      "account": "01962525107",
+      "instruction": "bKash Personal: use Send Money to 01962525107. After sending, enter the bKash Transaction ID below. Your payment remains pending until an admin verifies and approves it."
+    },
+    "Nagad": {
+      "enabled": true,
+      "account": "01962525107",
+      "instruction": "Nagad Personal: use Send Money to 01962525107. After sending, enter the Nagad Transaction ID below. Your payment remains pending until an admin verifies and approves it."
+    },
     "Rocket": { "enabled": false, "account": "", "instruction": "" },
     "Card": { "enabled": false, "account": "", "instruction": "" }
   },

@@ -100,6 +100,7 @@ async function ensureStorage() {
 }
 function defaultSettings() {
   return {
+    settingsVersion: 2,
     brandName: 'Career Minute',
     businessEmail: '',
     businessHours: 'Saturday–Thursday, 10:00 AM–8:00 PM',
@@ -107,8 +108,8 @@ function defaultSettings() {
     facebookUrl: 'https://www.facebook.com/careerminute',
     analytics: { googleMeasurementId: '', metaPixelId: '' },
     payment: {
-      bKash: { enabled: false, account: '', instruction: '' },
-      Nagad: { enabled: false, account: '', instruction: '' },
+      bKash: { enabled: true, account: '01962525107', instruction: 'bKash Personal: use Send Money to 01962525107. After sending, enter the bKash Transaction ID below. Your payment remains pending until an admin verifies and approves it.' },
+      Nagad: { enabled: true, account: '01962525107', instruction: 'Nagad Personal: use Send Money to 01962525107. After sending, enter the Nagad Transaction ID below. Your payment remains pending until an admin verifies and approves it.' },
       Rocket: { enabled: false, account: '', instruction: '' },
       Card: { enabled: false, account: '', instruction: '' },
     },
@@ -129,7 +130,23 @@ async function writeData(data) {
   await fs.rename(temporary, dataFile)
 }
 async function readSettings() {
-  try { return { ...defaultSettings(), ...JSON.parse(await fs.readFile(settingsFile, 'utf8')) } } catch { return defaultSettings() }
+  try {
+    const defaults = defaultSettings()
+    const stored = JSON.parse(await fs.readFile(settingsFile, 'utf8'))
+    // v2 deliberately replaces the old empty/disabled payment template with the verified public Send Money details.
+    // After an admin saves settings once, they can still enable or disable each method normally.
+    const isLegacyPaymentConfig = Number(stored.settingsVersion || 0) < 2
+    return {
+      ...defaults,
+      ...stored,
+      settingsVersion: 2,
+      payment: {
+        ...defaults.payment,
+        ...(stored.payment || {}),
+        ...(isLegacyPaymentConfig ? { bKash: defaults.payment.bKash, Nagad: defaults.payment.Nagad } : {}),
+      },
+    }
+  } catch { return defaultSettings() }
 }
 async function writeSettings(settings) {
   const temporary = `${settingsFile}.${process.pid}.tmp`
@@ -162,7 +179,12 @@ async function sendOrderEmail(order, settings) {
   // Optional Resend integration: notify the business and provide the customer a clear request reference.
   const messages = []
   if (settings.businessEmail) messages.push({ to: [settings.businessEmail], subject: `New Career Minute request ${order.reference}`, text: `A new ${order.service} request was submitted by ${order.fullName}. Reference: ${order.reference}. Log in to the admin area to review it.` })
-  if (order.email) messages.push({ to: [order.email], subject: `Career Minute received your request ${order.reference}`, text: `Hello ${order.fullName}, Career Minute has received your ${order.service} request. Your reference is ${order.reference}. You can check the production status at https://careerminute.com/track-order/ using this reference and your email address. We will review your information and follow up with the next steps, scope and payment instructions.` })
+  if (order.email) {
+    const paymentNote = order.transactionId
+      ? ` We received your ${order.paymentMethod} Transaction ID (${order.transactionId}). It is pending manual verification; payment is not approved until an authenticated Career Minute admin reviews it.`
+      : ' We will review your information and follow up with the next steps and scope.'
+    messages.push({ to: [order.email], subject: `Career Minute received your request ${order.reference}`, text: `Hello ${order.fullName}, Career Minute has received your ${order.service} request. Your reference is ${order.reference}. You can check the production status at https://careerminute.com/track-order/ using this reference and your email address.${paymentNote}` })
+  }
   await Promise.all(messages.map(sendResendEmail))
 }
 
@@ -196,6 +218,17 @@ app.post('/api/orders', upload.fields([{ name: 'file', maxCount: 1 }, { name: 'p
     if (!fullName || !validEmail(email) || !phone || !profession || !goal || !service || req.body.consent !== 'on') {
       return res.status(422).json({ error: 'Please complete all required request details.' })
     }
+    const settings = await readSettings()
+    const paymentDetails = paymentMethod && settings.payment?.[paymentMethod]
+    if (paymentMethod && !paymentDetails?.enabled) {
+      return res.status(422).json({ error: 'Please select an enabled payment method.' })
+    }
+    if (paymentMethod && !transactionId) {
+      return res.status(422).json({ error: 'Enter the Transaction ID after using Send Money so we can verify your payment.' })
+    }
+    if (transactionId && !paymentMethod) {
+      return res.status(422).json({ error: 'Select bKash Personal or Nagad Personal for the Transaction ID you entered.' })
+    }
     const files = req.files || {}
     const document = files.file?.[0]
     const paymentScreenshot = files.paymentScreenshot?.[0]
@@ -206,13 +239,13 @@ app.post('/api/orders', upload.fields([{ name: 'file', maxCount: 1 }, { name: 'p
     if (data.orders.some((item) => item.reference === reference)) throw new Error('Unable to create a unique request reference.')
     const order = {
       id: createId('order'), reference, service, fullName, email, phone, profession, goal,
-      status: 'new', paymentStatus: transactionId ? 'pending' : 'pending', paymentMethod, transactionId,
+      status: 'new', paymentStatus: 'pending', paymentMethod, transactionId,
       document: document ? { fileName: clean(document.originalname, 180), storageName: document.filename, mime: document.mimetype, size: document.size } : null,
       paymentScreenshot: paymentScreenshot ? { fileName: clean(paymentScreenshot.originalname, 180), storageName: paymentScreenshot.filename, mime: paymentScreenshot.mimetype, size: paymentScreenshot.size } : null,
       adminNote: '', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
     }
     data.orders.unshift(order); await writeData(data)
-    const settings = await readSettings(); await sendOrderEmail(order, settings)
+    await sendOrderEmail(order, settings)
     res.status(201).json({ reference: order.reference, status: order.status })
   } catch (error) { next(error) }
 })
@@ -268,6 +301,16 @@ app.get('/api/admin/orders', requireAdmin, async (req, res, next) => {
   try {
     const data = await readData(); const status = clean(req.query.status, 40)
     res.json({ orders: status ? data.orders.filter((order) => order.status === status) : data.orders })
+  } catch (error) { next(error) }
+})
+app.get('/api/admin/orders/:id/files/:fileType', requireAdmin, async (req, res, next) => {
+  try {
+    const data = await readData(); const order = data.orders.find((item) => item.id === req.params.id)
+    if (!order) return res.status(404).json({ error: 'Order not found.' })
+    const file = req.params.fileType === 'payment-proof' ? order.paymentScreenshot : req.params.fileType === 'document' ? order.document : null
+    if (!file?.storageName) return res.status(404).json({ error: 'Requested file not found.' })
+    res.setHeader('Content-Disposition', `attachment; filename="${clean(file.fileName, 180).replaceAll('"', '')}"`)
+    return res.type(file.mime || 'application/octet-stream').sendFile(file.storageName, { root: uploadDirectory, dotfiles: 'deny' }, (error) => { if (error) next(error) })
   } catch (error) { next(error) }
 })
 app.patch('/api/admin/orders/:id', requireAdmin, async (req, res, next) => {
